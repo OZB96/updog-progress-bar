@@ -19,7 +19,7 @@ var formData = new FormData();
 formData.append("file", file);
 
 var xhr = new XMLHttpRequest();
-xhr.open("POST", "/", true);
+xhr.open("POST", "/upload", true);
 
 xhr.upload.onprogress = function(event) {
 	if (event.lengthComputable) {
@@ -32,13 +32,13 @@ xhr.upload.onprogress = function(event) {
 	}
 };
 
-xhr.onload = function() {
-	if (xhr.status == 200) {
-	alert('File uploaded successfully.');
-	} else {
-	alert('File upload failed.');
-	}
-};
+// xhr.onload = function() {
+// 	if (xhr.status == 200) {
+// 	alert('File uploaded successfully.');
+// 	} else {
+// 	alert('File upload failed.');
+// 	}
+// };
 
 xhr.send(formData);
 }

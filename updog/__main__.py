@@ -47,6 +47,7 @@ def main():
     args = parse_arguments()
 
     app = Flask(__name__)
+    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024 * 1024  # 1TB limit
     auth = HTTPBasicAuth()
 
     global base_directory
@@ -145,7 +146,10 @@ def main():
                     filename = secure_filename(file.filename)
                     full_path = os.path.join(path, filename)
                     try:
-                        file.save(full_path)
+                        #file.save(full_path)
+                        with open(full_path, 'wb') as f:
+                            for chunk in file.stream:
+                                f.write(chunk)
                     except PermissionError:
                         abort(403, 'Write Permission Denied: ' + full_path)
 
