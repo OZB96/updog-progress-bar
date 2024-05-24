@@ -43,11 +43,18 @@
             </div>
             <!-- -- Upload Btn -- -->
             <p class="uploadBtn_P">
-                <button type="submit" class="uploadBtn btn btn-primary">
+                <button type="submit" class="uploadBtn btn btn-primary" onclick="uploadFile()">
                     Upload
                 </button>
             </p>
+              
         </form>
+        <div id="progress-container">
+            <div id="progress-bar">0%</div>
+        </div>
+        <div id="progress-container-alt" class="hidden">
+            <div id="progress-bar-alt" style="width: 0%; height: 30px; background-color: #4c74af;"></div>
+        </div>
     </div>
 
     {% if is_subdirectory %}

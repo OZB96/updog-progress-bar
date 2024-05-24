@@ -180,6 +180,23 @@ h6 {
 }
 
 // --- Upload
+
+#progress-bar {
+	width: 0%;
+	height: 30px;
+	background-color: #4caf50;
+	text-align: center;
+	line-height: 30px;
+	color: white;
+  }
+
+#progress-container {
+width: 100%;
+background-color: #ddd;
+margin-top: 20px;
+}
+
+
 .inputUploadP {
 	margin: 5px 0px 0px 20px;
 
