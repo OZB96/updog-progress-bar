@@ -1,8 +1,9 @@
 import os
 import signal
 import argparse
+import logging
 
-from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
+from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort, jsonify
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -123,8 +124,12 @@ def main():
     @auth.login_required
     def upload():
         if request.method == 'POST':
-
+            app.logger.info('testing info log')
             # No file part - needs to check before accessing the files['file']
+            if 'file' not in request.files or 'chunk_number' not in request.form or 'total_chunks' not in request.form or 'filename' not in request.form:
+            # Highlight: Returning a 400 error if any expected form data is missing
+                abort(401, request.form)
+
             if 'file' not in request.files:
                 return redirect(request.referrer)
 
@@ -143,13 +148,29 @@ def main():
                 # TODO:
                 # - Add support for overwriting
                 if file:
-                    filename = secure_filename(file.filename)
-                    full_path = os.path.join(path, filename)
                     try:
+                        #filename = secure_filename(file.filename)
+                        filename = request.form['filename']
+                        full_path = os.path.join(path, filename)
+                        chunk_number = int(request.form['chunk_number'])
+                        total_chunks = int(request.form['total_chunks'])
+                        
+                        with open(full_path, 'ab+') as f:
+                            f.write(file.read())
+
+                        # Check if upload is complete
+                        if chunk_number == total_chunks - 1:
+                            return jsonify({'status': 'complete'})
+                        
+                        return jsonify({'status': 'incomplete'})
+                        
+                        
+                        
+                        
                         #file.save(full_path)
-                        with open(full_path, 'wb') as f:
-                            for chunk in file.stream:
-                                f.write(chunk)
+                        # with open(full_path, 'wb') as f:
+                        #     for chunk in file.stream:
+                        #         f.write(chunk)
                     except PermissionError:
                         abort(403, 'Write Permission Denied: ' + full_path)
 
