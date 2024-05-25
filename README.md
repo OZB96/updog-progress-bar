@@ -11,7 +11,7 @@ It allows uploading and downloading via HTTP/S,
 can set ad hoc SSL certificates and use HTTP basic auth.
 
 
-# Note: This is a modified version of Updog, designed to show a progress bar for file uploads and to handle large file uploads more efficiently by uploading chunk by chunk
+### Note: This is a modified version of Updog, designed to show a progress bar for file uploads and to handle large file uploads more efficiently by uploading chunk by chunk
 
 <p align="center">
   <img src="https://sc0tfree.squarespace.com/s/updog-screenshot.png" alt="Updog screenshot"/>
