@@ -17,7 +17,7 @@ function uploadFile() {
 	console.log*("triggrerd");
 	var file = document.getElementById('file').files[0];
 	var path = document.getElementById('path').value;	
-	var chunkSize = 1024 * 1024 *10; // 1MB chunk size
+	var chunkSize = 1024 * 1024; // 1MB chunk size
 	var totalChunks = Math.ceil(file.size / chunkSize);
 	var progressBar = document.getElementById('progress-bar');
 	var progressBarAlt = document.getElementById('progress-bar-alt');
