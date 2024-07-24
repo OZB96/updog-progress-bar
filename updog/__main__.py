@@ -155,11 +155,21 @@ def main():
                         chunk_number = int(request.form['chunk_number'])
                         total_chunks = int(request.form['total_chunks'])
                         
-                        with open(full_path, 'ab+') as f:
+                        temp_file_path = full_path + ".part" + str(chunk_number)
+                        previous_temp_file_path = full_path + ".part" + str(chunk_number-1)
+
+                        if chunk_number > 0 and not os.path.exists(previous_temp_file_path):
+                            return jsonify({'status': 'error', 'message': 'Previous chunk missing', 'expected_chunk': chunk_number - 1})
+
+                        with open(previous_temp_file_path, 'ab+') as f:
                             f.write(file.read())
+                        
+                        os.rename(previous_temp_file_path, temp_file_path) 
+                            
 
                         # Check if upload is complete
                         if chunk_number == total_chunks - 1:
+                            os.rename(temp_file_path, full_path)                           
                             return jsonify({'status': 'complete'})
                         
                         return jsonify({'status': 'incomplete'})

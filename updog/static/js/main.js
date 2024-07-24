@@ -46,11 +46,18 @@ function uploadFile() {
 				var response = JSON.parse(xhr.responseText);
 				if (response.status === 'complete') {
 					alert('File uploaded successfully.');
-				}
+				} else if (response.status === 'error' && response.expected_chunk !== undefined){
+					var retryChunkNumber = response.expected_chunk;
+                    var start = retryChunkNumber * chunkSize;
+                    var end = Math.min(file.size, start + chunkSize);
+                    var retryChunk = file.slice(start, end);
+                    uploadChunk(retryChunk, retryChunkNumber, totalChunks, filename);
+				}else {
 				var percentComplete = ((chunkNumber + 1) / totalChunks) * 100;
 				progressBar.style.width = percentComplete + '%';
 				progressBar.innerHTML = Math.round(percentComplete) + '%';
 				progressBarAlt.style.width = percentComplete + '%';
+				}
 			} else {
 				alert('File upload failed.');
 			}
